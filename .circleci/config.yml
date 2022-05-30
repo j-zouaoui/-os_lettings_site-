@@ -91,7 +91,7 @@ jobs:
       - run:
           name: Push Docker Image
           command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME"
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker tag $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USERNAME/oc-lettings:lastest
             docker push $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
             docker push $DOCKERHUB_USERNAME/oc-lettings:lastest
