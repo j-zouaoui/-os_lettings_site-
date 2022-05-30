@@ -86,7 +86,7 @@ jobs:
     steps:
       - checkout
       - run:
-          #create docker image
+          #create docker image docker
           name: Build Docker image
           command: docker build -t $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 .
       - run:
