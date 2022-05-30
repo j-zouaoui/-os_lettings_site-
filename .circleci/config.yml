@@ -87,8 +87,14 @@ jobs:
       - checkout
       - run:
           name: Build Docker image
-          command: docker build -t circleci-heroku-jed:$CIRCLE_SHA1 .
-
+          command: docker build -t $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 .
+      - run:
+          name: Push Docker Image
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME"
+            docker tag $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USERNAME/oc-lettings:lastest
+            docker push $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USERNAME/oc-lettings:lastest
   deploy:
     machine: true
     steps:
@@ -98,6 +104,6 @@ jobs:
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
             HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:login
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a circleci-heroku-jed web
-            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a circleci-heroku-jed web
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:push -a os-letting-site web
+            HEROKU_API_KEY=${HEROKU_API_KEY} heroku container:release -a os-letting-site web
 
